@@ -1,0 +1,23 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    .gitignore                                         :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: alejhern <alejhern@student.42barcelona.co  +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/05/19 14:54:27 by alejhern          #+#    #+#              #
+#    Updated: 2026/05/19 14:54:31 by alejhern         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+# Ignore object files
+*.o
+
+# Ignore executable files
+btc
+RPN
+PmergeMe
+
+# Ignore backup files
+*.csv
+*.txt
