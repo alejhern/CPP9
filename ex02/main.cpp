@@ -12,11 +12,43 @@
 
 #include "PmergeMe.hpp"
 
+#define RESET  "\033[0m"
+#define GREEN  "\033[32m"
+#define RED    "\033[31m"
+#define BLUE   "\033[34m"
+#define GREY   "\033[90m"
+#define BOLD   "\033[1m"
+
+static void section(const std::string &name)
+{
+	std::cout << "\n"
+			  << BLUE << BOLD
+			  << "== " << name << " =="
+			  << RESET << "\n";
+}
+
+static void result(const std::string &name, bool ok)
+{
+	std::cout << "  " << name << ": ";
+
+	if (ok)
+		std::cout << GREEN << "OK" << RESET;
+	else
+		std::cout << RED << "FAILED" << RESET;
+
+	std::cout << "\n";
+}
+
+
 int	main(int argc, char **argv)
 {
 	if (argc < 2)
 	{
-		std::cerr << "Usage: ./PmergeMe <positive integers>" << std::endl;
+		std::cerr << RED << "Error: no arguments provided"
+		          << RESET << "\n";
+		std::cerr << GREY 
+		          << "Usage: ./PmergeMe <positive integers>"
+		          << RESET << "\n";
 		return (1);
 	}
 
@@ -24,83 +56,75 @@ int	main(int argc, char **argv)
 	{
 		PmergeMe pm;
 
-		std::vector<int>	vec;
-		std::deque<int>		deq;
-		std::list<int>		lst;
+		std::vector<int> vec;
+		std::deque<int>  deq;
+		std::list<int>   lst;
 
-		// =========================
-		// PARSE
-		// =========================
+
+		section("INPUT");
+
 		pm.parse(vec, argv, argc);
 		pm.parse(deq, argv, argc);
 		pm.parse(lst, argv, argc);
 
-		std::cout << "=========================\n";
-		std::cout << "        BEFORE\n";
-		std::cout << "=========================\n";
+		std::cout << "Elements: " << vec.size() << "\n";
 
-		std::cout << "Vector: ";
+
+		section("BEFORE");
+
+		std::cout << "Vector : ";
 		pm.printContainer(vec);
 
-		std::cout << "Deque : ";
+		std::cout << "Deque  : ";
 		pm.printContainer(deq);
 
-		std::cout << "List  : ";
+		std::cout << "List   : ";
 		pm.printContainer(lst);
 
-		// =========================
-		// SORT
-		// =========================
-		std::cout << "\n=========================\n";
-		std::cout << "        SORTING\n";
-		std::cout << "=========================\n";
+
+		section("SORTING");
 
 		pm.sort(vec);
 		pm.sort(deq);
 		pm.sort(lst);
 
-		// =========================
-		// AFTER
-		// =========================
-		std::cout << "\n=========================\n";
-		std::cout << "         AFTER\n";
-		std::cout << "=========================\n";
+		std::cout << GREEN << "Completed" << RESET << "\n";
 
-		std::cout << "Vector: ";
+
+		section("AFTER");
+
+		std::cout << "Vector : ";
 		pm.printContainer(vec);
 
-		std::cout << "Deque : ";
+		std::cout << "Deque  : ";
 		pm.printContainer(deq);
 
-		std::cout << "List  : ";
+		std::cout << "List   : ";
 		pm.printContainer(lst);
 
-		// =========================
-		// VALIDATION TEST
-		// =========================
-		std::cout << "\n=========================\n";
-		std::cout << "      VALIDATION\n";
-		std::cout << "=========================\n";
 
-		if (pm.isSorted(vec))
-			std::cout << "Vector sorted OK\n";
-		else
-			std::cout << "Vector NOT sorted\n";
+		section("CHECK");
 
-		if (pm.isSorted(deq))
-			std::cout << "Deque sorted OK\n";
-		else
-			std::cout << "Deque NOT sorted\n";
+		result("Vector", pm.isSorted(vec));
+		result("Deque ", pm.isSorted(deq));
+		result("List  ", pm.isSorted(lst));
 
-		if (pm.isSorted(lst))
-			std::cout << "List sorted OK\n";
-		else
-			std::cout << "List NOT sorted\n";
+
+		std::cout << "\n"
+				  << GREY
+				  << "--------------------------------"
+				  << RESET << "\n"
+				  << BOLD
+				  << "PmergeMe finished successfully"
+				  << RESET << "\n";
 
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << "Error: " << e.what() << std::endl;
+		std::cerr << RED << "Error: "
+		          << RESET << e.what()
+		          << "\n";
+		return (1);
 	}
 
 	return (0);
