@@ -69,7 +69,8 @@ template <> inline const char *PmergeMe::identify<std::list<int> >(const std::li
 	return ("list");
 }
 
-template <typename T> void PmergeMe::parse(T &container, char **argv, int argc)
+template <typename T>
+void PmergeMe::parse(T &container, char **argv, int argc)
 {
 	char		*end;
 	long		value;
@@ -77,14 +78,22 @@ template <typename T> void PmergeMe::parse(T &container, char **argv, int argc)
 
 	if (type == std::string("unknown container"))
 		throw PmergeMeException("Unsupported container type");
+
 	for (int i = 1; i < argc; ++i)
 	{
 		value = std::strtol(argv[i], &end, 10);
+
 		if (*end != '\0')
 			throw PmergeMeException("Invalid number: " + std::string(argv[i]));
+
 		if (value < 0 || value > INT_MAX)
 			throw PmergeMeException("Number out of range: "
 				+ std::string(argv[i]));
+
+		if (std::find(container.begin(), container.end(), value) != container.end())
+			throw PmergeMeException("Duplicate number: "
+				+ std::string(argv[i]));
+
 		container.push_back(static_cast<int>(value));
 	}
 }
