@@ -35,4 +35,12 @@ fclean: clean
 
 re: fclean all
 
+size ?= 10
+
+randomExecution:
+	@echo "Random execution with size $(size)..."
+	@NUMEROS=$$(shuf -i 1-1000 -n $(size) | tr '\n' ' '); \
+	./PmergeMe $$NUMEROS
+
+
 .PHONY: all clean fclean re
