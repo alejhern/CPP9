@@ -21,6 +21,21 @@ double PmergeMe::getTime(void)
 	return (tv.tv_sec + tv.tv_usec / 1000000.0);
 }
 
+/*
+** Secuencia de Jacobsthal: 0, 1, 1, 3, 5, 11, 21, 43...
+** Se usa para determinar el orden óptimo de inserción de los "menores"
+** en la cadena principal, minimizando el número de comparaciones.
+*/
+std::vector<long> PmergeMe::jacobsthal(size_t limit)
+{
+	std::vector<long> j;
+	j.push_back(0);
+	j.push_back(1);
+	while (j.back() < static_cast<long>(limit))
+		j.push_back(j[j.size() - 1] + 2 * j[j.size() - 2]);
+	return (j);
+}
+
 PmergeMe::PmergeMe()
 {
 }
