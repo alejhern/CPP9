@@ -44,7 +44,7 @@ class PmergeMe
 	};
 
   private:
-	template <typename T> void mergeInsertSort(typename T::iterator left,
+	template <typename T> void fordJohnsonSort(typename T::iterator left,
 		typename T::iterator right);
 	static inline std::vector<std::pair<int, int> > makePairs(std::vector<int> &arr,
     int &straggler, bool &odd);

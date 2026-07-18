@@ -79,14 +79,14 @@ template <typename T> void PmergeMe::sort(T &container)
 		throw PmergeMeException("Container has only one element");
 
 	start = getTime();
-	mergeInsertSort<T>(container.begin(), container.end());
+	fordJohnsonSort<T>(container.begin(), container.end());
 	end = getTime();
 
 	std::cout << "Time to sort " << identify(container) << ": "
 		<< std::fixed << std::setprecision(5) << (end - start) << " us" << std::endl;
 }
 
-template <typename T> void PmergeMe::mergeInsertSort(typename T::iterator left,
+template <typename T> void PmergeMe::fordJohnsonSort(typename T::iterator left,
 	typename T::iterator right)
 {
 	typedef typename T::value_type value_type;
