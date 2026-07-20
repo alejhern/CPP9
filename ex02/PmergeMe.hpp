@@ -6,81 +6,95 @@
 /*   By: alejhern <alejhern@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 12:43:04 by alejhern          #+#    #+#             */
-/*   Updated: 2026/07/18 00:00:00 by alejhern         ###   ########.fr       */
+/*   Updated: 2026/07/20 00:00:00 by alejhern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PMERGEME_HPP
 # define PMERGEME_HPP
+
 # include <algorithm>
+# include <cctype>
+# include <cerrno>
 # include <climits>
 # include <cstdlib>
 # include <deque>
 # include <iomanip>
 # include <iostream>
-# include <list>
 # include <stdexcept>
 # include <utility>
 # include <vector>
 
+/*
+** PmergeMe implementa el algoritmo merge-insertion (Ford-Johnson) dos
+** veces, una vez por contenedor: una version trabaja unicamente con
+** std::vector<int> (y std::vector<std::pair<int,int> > como estructura
+** auxiliar de pares) y la otra unicamente con std::deque<int> (y
+** std::deque<std::pair<int,int> > como auxiliar). No existe ninguna
+** funcion generica ni template que unifique ambas: son dos caminos de
+** codigo independientes, tal y como recomienda el subject.
+*/
 class PmergeMe
 {
-  public:
-	PmergeMe();
-	PmergeMe(const PmergeMe &other);
-	PmergeMe &operator=(const PmergeMe &other);
-	~PmergeMe();
+	public:
+		PmergeMe();
+		PmergeMe(const PmergeMe &other);
+		PmergeMe &operator=(const PmergeMe &other);
+		~PmergeMe();
 
-	template <typename T> void parse(T &container, char **argv, int argc);
+		class PmergeMeException : public std::runtime_error
+		{
+			public:
+				PmergeMeException(const std::string &message);
+		};
 
-	template <typename T> void sort(T &container);
+		void	parseArgs(char **argv, int argc);
 
-	template <typename T> bool isSorted(const T &container);
+		void	sortVector(void);
+		void	sortDeque(void);
 
-	template <typename T> void printContainer(const T &container);
-	class PmergeMeException : public std::runtime_error
-	{
-		public:
-		PmergeMeException(const std::string &message);
-	};
+		void	printBefore(void) const;
+		void	printAfter(void) const;
+		void	printTimes(void) const;
 
-  private:
-	template <typename T> void fordJohnsonSort(typename T::iterator left,
-		typename T::iterator right);
+	private:
+		std::vector<int>	_raw;		/* secuencia original, sin ordenar */
+		std::vector<int>	_vec;		/* copia ordenada con std::vector */
+		std::deque<int>	_deq;		/* copia ordenada con std::deque */
 
-	/*
-	** Todo lo que sigue esta templatizado sobre T (el propio contenedor
-	** de origen: std::vector<int> o std::deque<int>). El algoritmo
-	** opera siempre directamente sobre T, nunca lo convierte a otro
-	** tipo de contenedor distinto al de origen.
-	*/
-	template <typename T> static std::vector<std::pair<typename T::value_type,
-		typename T::value_type> > makePairs(T &arr,
-		typename T::value_type &straggler, bool &odd);
+		double	_vecTime;
+		double	_deqTime;
 
-	template <typename T> static void sortPairsByFirst(
-		std::vector<std::pair<typename T::value_type,
-		typename T::value_type> > &pairs);
+		double	getTime(void) const;
 
-	template <typename T> static T buildMainChain(
-		const std::vector<std::pair<typename T::value_type,
-		typename T::value_type> > &pairs);
+		static long	parseOne(const std::string &token);
 
-	static std::vector<size_t> jacobsthalOrder(size_t pendCount);
+		/* --------------------- Jacobsthal (comun, sin contenedor) --------------------- */
+		static std::vector<size_t>	jacobsthalOrder(size_t pendCount);
 
-	template <typename T> static void insertPending(T &mainChain,
-		const std::vector<std::pair<typename T::value_type,
-		typename T::value_type> > &pairs,
-		const std::vector<size_t> &order);
+		/* ------------------------- version std::vector<int> ------------------------- */
+		static std::vector<std::pair<int, int> >	makePairsVector(
+				std::vector<int> &arr, int &straggler, bool &odd);
+		static void	sortPairsByFirstVector(
+				std::vector<std::pair<int, int> > &pairs);
+		static std::vector<int>	buildMainChainVector(
+				const std::vector<std::pair<int, int> > &pairs);
+		static void	insertPendingVector(std::vector<int> &mainChain,
+				const std::vector<std::pair<int, int> > &pairs,
+				const std::vector<size_t> &order);
+		static std::vector<int>	fordJohnsonVector(std::vector<int> arr);
 
-	template <typename T> static T fordJohnson(T arr);
-
-	static std::vector<long> jacobsthal(size_t limit);
-
-	double getTime(void);
-	template <typename T> const char *identify(const T &);
+		/* -------------------------- version std::deque<int> -------------------------- */
+		static std::deque<std::pair<int, int> >	makePairsDeque(
+				std::deque<int> &arr, int &straggler, bool &odd);
+		static void	sortPairsByFirstDeque(
+				std::deque<std::pair<int, int> > &pairs);
+		static std::deque<int>	buildMainChainDeque(
+				const std::deque<std::pair<int, int> > &pairs);
+		static void	insertPendingDeque(std::deque<int> &mainChain,
+				const std::deque<std::pair<int, int> > &pairs,
+				const std::vector<size_t> &order);
+		static std::deque<int>	fordJohnsonDeque(std::deque<int> arr);
 };
-
-#include "PmergeMe.tpp"
 
 #endif /* PMERGEME_HPP */
