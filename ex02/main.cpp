@@ -39,5 +39,6 @@ int	main(int argc, char **argv)
 	pmerge.sortDeque();
 
 	pmerge.printAfter();
+	pmerge.sortedCheck();
 	return (0);
 }
