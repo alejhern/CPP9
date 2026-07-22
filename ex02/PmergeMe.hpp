@@ -55,6 +55,7 @@ class PmergeMe
 
 		void	printBefore(void) const;
 		void	printAfter(void) const;
+		void	sortedCheck(void) const;
 
 	private:
 		std::vector<int>	_raw;		/* secuencia original, sin ordenar */

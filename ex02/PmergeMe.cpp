@@ -48,10 +48,10 @@ PmergeMe::PmergeMeException::PmergeMeException(const std::string &message)
 
 double PmergeMe::getTime(void) const
 {
-	struct timeval tv;
+	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000000.0 + tv.tv_usec);
+	return (tv.tv_sec + tv.tv_usec / 1000000.0);
 }
 
 /* -------------------------------- parsing -------------------------------- */
@@ -263,7 +263,7 @@ void PmergeMe::sortVector(void)
 
 	std::cout << "Time to process a range of " << _raw.size()
 			  << " elements with std::vector : "
-			  << std::fixed << std::setprecision(5) << end - start << " us" << std::endl;
+			  << std::fixed << std::setprecision(7) << end - start << " s" << std::endl;
 }
 
 /* ============================================================ */
@@ -392,7 +392,7 @@ void PmergeMe::sortDeque(void)
 
 	std::cout << "Time to process a range of " << _raw.size()
 			  << " elements with std::deque : "
-			  << std::fixed << std::setprecision(5) << end - start << " us" << std::endl;
+			  << std::fixed << std::setprecision(7) << end - start << " s" << std::endl;
 }
 
 /* -------------------------------- printing -------------------------------- */
@@ -426,4 +426,36 @@ void PmergeMe::printAfter(void) const
 			std::cout << " ";
 	}
 	std::cout << std::endl;
+}
+
+// --------------------------CHECKING------------------------------
+void PmergeMe::sortedCheck(void) const
+{
+	size_t	i;
+
+	i = 1;
+	while (i < _vec.size())
+	{
+		if (_vec[i - 1] > _vec[i])
+		{
+			std::cout << "Vector is NOT sorted" << std::endl;
+			break;
+		}
+		i++;
+	}
+	if (i == _vec.size())
+		std::cout << "Vector is sorted" << std::endl;
+
+	i = 1;
+	while (i < _deq.size())
+	{
+		if (_deq[i - 1] > _deq[i])
+		{
+			std::cout << "Deque is NOT sorted" << std::endl;
+			break;
+		}
+		i++;
+	}
+	if (i == _deq.size())
+		std::cout << "Deque is sorted" << std::endl;
 }
