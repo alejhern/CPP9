@@ -55,15 +55,11 @@ class PmergeMe
 
 		void	printBefore(void) const;
 		void	printAfter(void) const;
-		void	printTimes(void) const;
 
 	private:
 		std::vector<int>	_raw;		/* secuencia original, sin ordenar */
 		std::vector<int>	_vec;		/* copia ordenada con std::vector */
 		std::deque<int>	_deq;		/* copia ordenada con std::deque */
-
-		double	_vecTime;
-		double	_deqTime;
 
 		double	getTime(void) const;
 

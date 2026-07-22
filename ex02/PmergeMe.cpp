@@ -15,7 +15,7 @@
 
 /* --------------------------- canonical form --------------------------- */
 
-PmergeMe::PmergeMe() : _vecTime(0.0), _deqTime(0.0)
+PmergeMe::PmergeMe() 
 {
 }
 
@@ -31,8 +31,6 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &other)
 		_raw = other._raw;
 		_vec = other._vec;
 		_deq = other._deq;
-		_vecTime = other._vecTime;
-		_deqTime = other._deqTime;
 	}
 	return (*this);
 }
@@ -263,7 +261,9 @@ void PmergeMe::sortVector(void)
 	_vec = fordJohnsonVector(_vec);
 	double end = getTime();
 
-	_vecTime = end - start;
+	std::cout << "Time to process a range of " << _raw.size()
+			  << " elements with std::vector : "
+			  << std::fixed << std::setprecision(5) << end - start << " us" << std::endl;
 }
 
 /* ============================================================ */
@@ -390,14 +390,16 @@ void PmergeMe::sortDeque(void)
 	_deq = fordJohnsonDeque(_deq);
 	double end = getTime();
 
-	_deqTime = end - start;
+	std::cout << "Time to process a range of " << _raw.size()
+			  << " elements with std::deque : "
+			  << std::fixed << std::setprecision(5) << end - start << " us" << std::endl;
 }
 
 /* -------------------------------- printing -------------------------------- */
 
 void PmergeMe::printBefore(void) const
 {
-	std::cout << "Before: ";
+	std::cout << "Before (raw): ";
 	for (size_t i = 0; i < _raw.size(); i++)
 	{
 		std::cout << _raw[i];
@@ -409,22 +411,19 @@ void PmergeMe::printBefore(void) const
 
 void PmergeMe::printAfter(void) const
 {
-	std::cout << "After: ";
+	std::cout << "After (VECTOR): ";
 	for (size_t i = 0; i < _vec.size(); i++)
 	{
 		std::cout << _vec[i];
 		if (i + 1 < _vec.size())
 			std::cout << " ";
 	}
+	std::cout << std::endl << "After (DEQUE): ";
+	for (size_t i = 0; i < _deq.size(); i++)
+	{
+		std::cout << _deq[i];
+		if (i + 1 < _deq.size())
+			std::cout << " ";
+	}
 	std::cout << std::endl;
-}
-
-void PmergeMe::printTimes(void) const
-{
-	std::cout << "Time to process a range of " << _raw.size()
-			  << " elements with std::vector : "
-			  << std::fixed << std::setprecision(5) << _vecTime << " us" << std::endl;
-	std::cout << "Time to process a range of " << _raw.size()
-			  << " elements with std::deque : "
-			  << std::fixed << std::setprecision(5) << _deqTime << " us" << std::endl;
 }

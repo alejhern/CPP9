@@ -39,7 +39,5 @@ int	main(int argc, char **argv)
 	pmerge.sortDeque();
 
 	pmerge.printAfter();
-	pmerge.printTimes();
-
 	return (0);
 }
